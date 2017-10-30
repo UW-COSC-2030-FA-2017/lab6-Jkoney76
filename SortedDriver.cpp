@@ -1,4 +1,6 @@
 // SortedDriver.cpp
+// Jake Koney
+// 10/27/2017
 
 // tom bailey   1445  25 mar 2014
 // Construct sorted sequences and call functions that 
@@ -12,6 +14,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 
 using namespace std;
@@ -63,19 +66,94 @@ getWords(size_t numWords, size_t wordLength, string alphabet)
 double
 mostIsolated(vector<double> & number)
 {
-	// STUB  STUB  STUB
-	return -123.456;
+	
+	double distance;
+	double isolated;
+	double MaxDistance;
+	double upperDist;
+	double LowerDist;
+
+	isolated = number[0];
+	distance = abs(number[1] - number[0]);
+	MaxDistance = distance;
+
+	for (int i = 1; i < (number.size()-1); i++) {
+		upperDist = abs(number[i] - number[i-1]);
+		LowerDist = abs(number[i+1] - number[i]);
+
+		if (LowerDist > upperDist) {
+			if (upperDist > distance) {
+				distance = upperDist;
+				isolated = number[i];
+				MaxDistance = upperDist + LowerDist;
+			}
+			if (upperDist == distance && (i - 1) == 0){
+				isolated = i;
+			}
+			if (upperDist == distance) {
+				double iDistance = upperDist + LowerDist;
+				if (iDistance > MaxDistance) {
+					distance = upperDist;
+					isolated = number[i];
+					MaxDistance = iDistance;
+				}
+			}
+
+		}
+		if (upperDist > LowerDist) {
+			if (LowerDist > distance) {
+				distance = LowerDist;
+				isolated = number[i];
+				MaxDistance = upperDist + LowerDist;
+			}
+			if (LowerDist == distance) {
+				double iDistance = upperDist + LowerDist;
+				if (iDistance > MaxDistance) {
+					distance = LowerDist;
+					isolated = number[i];
+					MaxDistance = iDistance;
+				}
+			}
+
+		}
+		
+	}
+
+	upperDist = abs(number[number.size() - 1] - number[number.size() - 2]);
+	if (upperDist > distance) {
+		distance = upperDist;
+		isolated = number[number.size() - 1];
+	}
+
+
+	return isolated;
 }
 
 
 // pre:  A and B are sorted.
 // post: The number of strings in A that do not occur in B
 //         has been returned.
-int
-unmatched(list<string> & A, list<string> & B)
+int unmatched(list<string> & A, list<string> & B)
 {
-	// STUB  STUB  STUB
-	return -1;
+	int counter = 0;
+	list<string>::iterator IA = A.begin();
+	list<string>::iterator IB = B.begin();
+
+	while (IB != B.end() && IA !=A.end()) {
+		if (*IA == *IB) {
+			IA++;
+		}
+		else if (*IA > *IB) {
+			IB++;
+		}
+		else if(*IA < *IB) {
+			counter++;
+			IA++;
+		}
+
+	}
+	
+	return counter;
 }
 
 
